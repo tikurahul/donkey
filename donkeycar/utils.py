@@ -350,6 +350,28 @@ def throttle(input_value):
     return ((1 / decay) - dampening)
 
 '''
+THROTTLE
+'''
+
+STEERING_MIN = -1.
+STEERING_MAX = 1.
+# Scale throttle ~ 0.5 - 1.0 depending on the steering angle
+EXP_SCALING_FACTOR = 0.5
+DAMPENING = 0.05
+
+def _steering(input_value):
+    input_value = clamp(input_value, STEERING_MIN, STEERING_MAX)
+    return ((input_value - STEERING_MIN) / (STEERING_MAX - STEERING_MIN))
+
+
+def throttle(input_value):
+    magnitude = _steering(input_value)
+    decay = math.exp(magnitude * EXP_SCALING_FACTOR)
+    dampening = DAMPENING * magnitude
+    return ((1 / decay) - dampening)
+
+
+'''
 OTHER
 '''
 
